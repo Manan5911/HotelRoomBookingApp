@@ -1,0 +1,32 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      routes:
+        - id: BOOKING-SERVICE
+          uri: lb://BOOKING-SERVICE
+          predicates:
+            - Path=/hotel/booking,/hotel/booking/transaction
+
+        - id: PAYMENT-SERVICE
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/transaction,/payment/transaction/**
+
+    discovery:
+      enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
